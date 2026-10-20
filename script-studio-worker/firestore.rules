@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anonymous Firebase sessions allow no-login UI while keeping Firestore from public unauthenticated access.
+    // Anyone who can open the public website can still choose any publisher name.
+    match /scripts/{scriptId} {
+      allow read, create, update, delete: if request.auth != null;
+    }
+  }
+}

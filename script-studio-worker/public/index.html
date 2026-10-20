@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Script Studio — Video Affiliate Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+  <section id="auth-screen" class="auth-screen">
+    <div class="auth-card publisher-picker-card">
+      <div class="brand-mark large">S</div>
+      <p class="eyebrow">VIDEO AFFILIATE WORKSPACE</p>
+      <h1>Script Studio</h1>
+      <p class="muted">Pilih penerbit untuk masuk ke workspace bersama. Tidak perlu login dengan email atau password.</p>
+      <div id="publisher-choices" class="publisher-choices"></div>
+      <p id="auth-error" class="error-text"></p>
+      <p class="tiny muted">Pilih nama penerbit yang sesuai. Nama ini hanya penanda, bukan verifikasi identitas.</p>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark">S</div>
+        <div><strong>Script Studio</strong><small>Affiliate workspace</small></div>
+      </div>
+      <div class="workspace-chip"><span class="status-dot"></span><span>Workspace Penerbit</span></div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
+        <button class="nav-item" data-view="scripts"><span class="nav-icon">▤</span> Semua Skrip <span id="nav-script-count" class="nav-count">0</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">✦</div><strong>Workspace rapi</strong><p>Catat brief, referensi, visual talent, dan VO di satu tempat.</p></div>
+        <button id="signout-btn" class="nav-item signout"><span class="nav-icon">⇥</span> Ganti penerbit</button>
+        <div class="user-mini"><div id="avatar" class="avatar">P</div><div class="user-details"><strong id="user-name">Penerbit</strong><small id="user-email">Mode demo</small></div><span class="online-dot"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="menu-toggle" class="icon-btn mobile-menu" aria-label="Buka menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-current">Dashboard</strong></div>
+        <div class="top-actions"><span class="today-label" id="today-label"></span><div class="top-avatar" id="top-avatar">P</div></div>
+      </header>
+
+      <section id="dashboard-view" class="view">
+        <div class="welcome-row">
+          <div><p class="eyebrow">OVERVIEW WORKSPACE</p><h1>Halo, <span id="welcome-name">Penerbit</span> <span class="wave">✦</span></h1><p class="muted">Siapkan skrip video affiliate berikutnya dengan lebih teratur.</p></div>
+          <button class="btn primary" id="new-script-top"><span class="plus">＋</span> Buat skrip baru</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-head"><span>Total skrip</span><span class="stat-icon purple">▤</span></div><div id="stat-total" class="stat-value">0</div><div class="stat-foot"><span class="stat-dot purple-dot"></span>Semua skrip tersimpan</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Skrip bulan ini</span><span class="stat-icon orange">◷</span></div><div id="stat-month" class="stat-value">0</div><div id="stat-month-label" class="stat-foot">Bulan berjalan</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Total baris VO</span><span class="stat-icon green">≋</span></div><div id="stat-rows" class="stat-value">0</div><div class="stat-foot"><span class="stat-dot green-dot"></span>Visual dan voice over</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Penerbit aktif</span><span class="stat-icon blue">♙</span></div><div class="stat-value">7</div><div class="stat-foot"><span class="stat-dot blue-dot"></span>Target tim penerbit</div></article>
+        </div>
+        <div class="section-heading"><div><h2>Skrip terbaru</h2><p class="muted">Pantau pekerjaan yang baru dibuat atau diperbarui.</p></div><button class="text-btn" id="see-all">Lihat semua <span>→</span></button></div>
+        <div id="recent-scripts" class="script-grid"></div>
+        <div id="dashboard-empty" class="empty-state hidden"><div class="empty-art">✎</div><h3>Belum ada skrip</h3><p>Mulai dengan membuat skrip pertama untuk tim kamu.</p><button class="btn primary" id="empty-create">＋ Buat skrip pertama</button></div>
+      </section>
+
+      <section id="scripts-view" class="view hidden">
+        <div class="welcome-row compact"><div><p class="eyebrow">LIBRARY</p><h1>Semua skrip</h1><p class="muted">Cari, buka, dan kelola skrip berdasarkan tanggal produksi.</p></div><button class="btn primary" id="new-script-list"><span class="plus">＋</span> Buat skrip baru</button></div>
+        <div class="filter-bar">
+          <div class="search-wrap"><span>⌕</span><input id="search-input" type="search" placeholder="Cari judul, penerbit, atau isi VO..."></div>
+          <select id="month-filter" aria-label="Filter bulan"><option value="">Semua bulan</option></select>
+          <select id="publisher-filter" aria-label="Filter penerbit"><option value="">Semua penerbit</option></select>
+        </div>
+        <div id="script-groups" class="script-groups"></div>
+        <div id="scripts-empty" class="empty-state hidden"><div class="empty-art">⌕</div><h3>Skrip tidak ditemukan</h3><p>Coba ubah kata kunci atau filter yang dipilih.</p></div>
+      </section>
+      <footer class="footer"><span>© <span id="year"></span> Script Studio</span><span><i class="status-dot"></i> <span id="sync-status">Mode demo lokal</span></span></footer>
+    </main>
+  </div>
+
+  <div id="script-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-panel">
+      <div class="modal-header"><div><p class="eyebrow">SCRIPT EDITOR</p><h2 id="modal-title">Buat skrip baru</h2><p class="muted">Lengkapi brief dan susun visual dengan VO.</p></div><button id="close-modal" class="icon-btn" aria-label="Tutup">×</button></div>
+      <form id="script-form">
+        <input type="hidden" id="script-id">
+        <div class="form-grid">
+          <label class="span-2">Judul skrip <input id="script-title" maxlength="120" placeholder="Contoh: Affiliate — Serum wajah" required></label>
+          <label>Nama penerbit <select id="script-publisher" required></select></label>
+          <label>Tanggal produksi <input id="script-date" type="date" required></label>
+          <label>Waktu produksi <input id="script-time" type="time" required></label>
+          <label class="span-2">Link referensi produk (opsional) <input id="script-reference" type="url" placeholder="https://..."><small>Link hanya dicatat sebagai referensi; file gambar/video tidak diunggah.</small></label>
+          <label class="span-2">Catatan / brief <textarea id="script-brief" rows="2" placeholder="Tujuan video, target audiens, keunggulan produk..."></textarea></label>
+        </div>
+        <div class="rows-heading"><div><h3>Rundown visual & VO</h3><p class="muted">Satu baris untuk setiap adegan.</p></div><button id="add-row-btn" type="button" class="btn secondary small">＋ Tambah baris</button></div>
+        <div class="table-wrap editor-table-wrap"><table class="editor-table"><thead><tr><th class="number-col">No</th><th>Deskripsi Visual <span class="th-sub">(Talent ngapain)</span></th><th>VO <span class="th-sub">(Voice over)</span></th><th class="action-col"></th></tr></thead><tbody id="editor-rows"></tbody></table></div>
+        <div class="ai-panel"><div class="ai-orb">✦</div><div class="ai-content"><strong>Bantu susun dengan AI teks</strong><p>Masukkan perintah teks untuk membuat draft adegan dan VO. Tidak menerima upload gambar atau video.</p><div class="ai-input-row"><input id="ai-prompt" placeholder="Contoh: Buat 4 adegan promosi tumbler, gaya santai..." maxlength="800"><button type="button" id="ai-generate-btn" class="btn dark small">Buat draft ↗</button></div><p id="ai-status" class="tiny muted"></p></div></div>
+        <div class="modal-footer"><button type="button" id="cancel-modal" class="btn secondary">Batal</button><button type="submit" class="btn primary" id="save-script-btn">Simpan skrip <span>✓</span></button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="detail-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal-panel detail-panel"><div class="modal-header"><div><p class="eyebrow">SCRIPT DETAIL</p><h2 id="detail-title">Detail skrip</h2><p id="detail-meta" class="muted"></p></div><button id="close-detail" class="icon-btn" aria-label="Tutup">×</button></div><div id="detail-content"></div><div class="modal-footer"><button id="detail-delete" class="btn danger-outline">Hapus</button><div class="spacer"></div><button id="detail-edit" class="btn primary">Edit skrip ✎</button></div></div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
